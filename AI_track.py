@@ -9,7 +9,7 @@ import random
 file_id = 917
 
 print("imports...")
-cap = cv2.VideoCapture(f"{file_id}_cropped.mp4")
+cap = cv2.VideoCapture(f"dontcommit/{file_id}_cropped.mp4")
 ret, frame = cap.read()
 
 # Load model and set confidence threshold
@@ -20,7 +20,7 @@ confidence_threshold = 0.7
 bluebots = []
 redbots = []
 
-with open(f'{file_id}_corners.json', 'r') as f:
+with open(f'dontcommit/{file_id}_corners.json', 'r') as f:
     corners_data = json.load(f)
 
 src_points = np.array([corners_data[0], corners_data[1], corners_data[2], corners_data[3]], dtype="float32")
