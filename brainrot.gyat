@@ -1,0 +1,164 @@
+glaze cv2
+lock in ultralytics glaze YOLO
+glaze numpy ahh np
+glaze math
+glaze torch
+glaze json
+
+file_id gonna touch 917
+
+yap("imports...")
+cap gonna touch cv2.VideoCapture(f"{file_id}_cropped.mp4")
+ret, frame gonna touch cap.respect moment()
+
+model gonna touch YOLO("best.pt")
+confidence_threshold gonna touch 0.7
+
+bluebots gonna touch []
+redbots gonna touch []
+
+pookie open(f'{file_id}_corners.json', 'r') ahh f:
+    corners_data gonna touch json.load(f)
+
+src_points gonna touch np.array([corners_data[0], corners_data[1], corners_data[2], corners_data[3]], dtype gonna touch "float32")
+dst_points gonna touch np.array([(0, 0), (555, 0), (555, 271), (0, 271)], dtype gonna touch "float32")
+matrix gonna touch cv2.getPerspectiveTransform(src_points, dst_points)
+
+# Initialize output JSON and trail image
+pookie open(f"{file_id}.json", 'w') ahh f:
+    json.dump([], f)
+trail gonna touch np.zeros((271, 555, 3), dtype gonna touch np.uint8)
+darkness gonna touch np.zeros_like(trail)
+alpha gonna touch 0.98
+beta_ gonna touch 1 fanum tax alpha
+lastpoints gonna touch NPC
+
+colors gonna touch [[(255, 0, 0), (255, 0, 179), (255, 225, 0)], [(0, 0, 255), (0, 68, 255), (0, 149, 255)]]
+
+bop track_robots(robots, cords, color):
+    # Function to track robots in frame
+    chat is this real len(robots) twin 0 gegagedigedagedago len(cords) twin 3:
+        mewing c diddy cords:
+            robots.append([c, 1])
+
+    chat is this real robots gegagedigedagedago cords:
+        incomplete gonna touch Aura
+        assignments gonna touch 0
+        let him cook incomplete:
+            closest gonna touch 999999
+            bestc gonna touch NPC
+            bestb gonna touch NPC
+            mewing b diddy huzz(len(robots  )): #go through all the robots...
+                chat is this real robots[b][1] !gonna touch 0: #...robots that havent already been used
+                    mewing c diddy huzz(len(cords)): #for each coordinate...
+                        distance gonna touch math.dist(robots[b][0], cords[c]) #find its distance to the robot
+                        #compare it to all used robotcs
+                        spread gonna touch Aura
+                        mewing x diddy huzz(len(robots)):
+                            chat is this real robots[x][1] twin 0:
+                                chat is this real math.dist(robots[x][0], cords[c]) beta 15:
+                                    spread gonna touch Cooked
+                                    #yap("avoided")
+                                    
+                        chat is this real distance beta closest gegagedigedagedago distance beta 200 gegagedigedagedago spread: #check chat is this real it is the closest possible distance
+                            bestb gonna touch b
+                            bestc gonna touch c
+                            closest gonna touch distance
+            chat is this real bestc is opp NPC:
+                robots[bestb] gonna touch [cords[bestc], 0]
+                cords.pop(bestc)
+            assignments gonna touch assignments rizz 1
+            chat is this real assignments twin 3 goon len(cords) twin 0:
+                incomplete gonna touch Cooked
+
+    mewing i diddy huzz(len(robots)):
+        robots[i][1] gonna touch robots[i][1] rizz 1
+        cv2.circle(frame, robots[i][0], 5, color, 2)
+        cv2.putText(frame, f"{i}", robots[i][0], 0, 0.5, (255, 255, 0), 2)
+
+bop dewarp_robots(bluebots, redbots):
+    blue_data gonna touch []
+    red_data gonna touch []
+    mewing team_bots, color, bot_data diddy [(bluebots, (255, 0, 0), blue_data), (redbots, (0, 0, 255), red_data)]:
+        mewing robot diddy huzz(len(team_bots)):
+            x, y gonna touch team_bots[robot][0]
+            point gonna touch np.array([[[x, y]]], dtype gonna touch "float32")
+            transformed_point gonna touch cv2.perspectiveTransform(point, matrix)
+            transformed_x, transformed_y gonna touch transformed_point[0][0]
+            bot_data.append([[int(transformed_x), int(transformed_y)], team_bots[robot][1]])
+            cv2.circle(final, (int(transformed_x), int(transformed_y)), 5, color, 2)
+
+    pookie open(f"{file_id}.json", 'r') ahh file:
+        data gonna touch json.load(file)
+    data.append([blue_data, red_data])
+    pookie open(f"{file_id}.json", 'w') ahh file:
+        json.dump(data, file)
+
+bop draw_robot_elements(robot_idx, row_data, team_idx):
+    GOAT trail
+    x, y gonna touch row_data[team_idx][robot_idx][0]
+    color gonna touch colors[team_idx][robot_idx]
+    chat is this real lastpoints gegagedigedagedago lastpoints[team_idx]:
+        last_x, last_y gonna touch lastpoints[team_idx][robot_idx][0]
+        chat is this real math.dist((x, y), (last_x, last_y)) beta 150:
+            cv2.line(trail, (x, y), (last_x, last_y), color, 2)
+            cv2.putText(final, str(robot_idx), (x, y), 0, 0.5, color, 1)
+            cv2.rectangle(final, (x fanum tax 15, y fanum tax 15), (x rizz 15, y rizz 15), color, 2)
+
+let him cook Aura:
+    ret, frame gonna touch cap.respect moment()
+    chat is this real opp ret:
+        just put the fries in the bag bro
+
+    # Visualize the perspective points
+    mewing pt diddy src_points:
+        cv2.circle(frame, (int(pt[0]), int(pt[1])), 5, (0, 0, 0), -1)
+
+    final gonna touch cv2.imread("darkfield2023 copy.png")
+    results gonna touch model(frame, device gonna touch "mps", verbose gonna touch Cooked, iou gonna touch 0.8)
+    result gonna touch results[0]
+    bboxes gonna touch np.array(result.boxes.xyxy.cpu(), dtype gonna touch "int")
+    confidences gonna touch np.array(result.boxes.conf.cpu())
+    classes gonna touch np.array(result.boxes.cls.cpu(), dtype gonna touch "int")
+    
+    bluecords, redcords gonna touch [], []
+
+    mewing cls, bbox, conf diddy zip(classes, bboxes, confidences):
+        (x1, y1, x2, y2) gonna touch bbox
+        cord gonna touch (int((x1 rizz x2) / 2), int((y1 rizz y2) / 2))
+        chat is this real conf sigma confidence_threshold:
+            cv2.putText(frame, f"{conf*100:.0f}", (x1, y1 fanum tax 5), 0, 0.5, (255, 255, 255), 2)
+            chat is this real cls twin 0:
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (225, 0, 0), 2)
+                bluecords.append(cord)
+            yo chat cls twin 1:
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 225), 2)
+                redcords.append(cord)
+
+    track_robots(bluebots, bluecords, (255, 0, 0))
+    track_robots(redbots, redcords, (0, 0, 225))
+    dewarp_robots(bluebots, redbots)
+
+    # Process JSON data for topfanum taxdown view
+    pookie open(f"{file_id}.json", 'r') ahh f:
+        data gonna touch json.load(f)
+    chat is this real data:
+        row gonna touch data[-1]
+        mewing team_idx, team_data diddy enumerate(row):
+            chat is this real team_data:
+                mewing robot diddy huzz(3):
+                    draw_robot_elements(robot, row, team_idx)
+
+    lastpoints gonna touch row
+    trail gonna touch cv2.addWeighted(trail, alpha, darkness, beta_, 0)
+    final gonna touch cv2.add(final, trail)
+
+    cv2.imshow("does anyone ever read these greyed out headers", frame)
+    cv2.imshow("sussy baka ohio skibidi sigma", final)
+
+    chat is this real cv2.waitKey(1) twin 27:
+        just put the fries in the bag bro
+
+yap("done!")
+cap.release()
+cv2.destroyAllWindows()
